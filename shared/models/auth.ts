@@ -29,7 +29,7 @@ export const users = pgTable("users", {
 // Login tracking table for daily reports
 export const loginLogs = pgTable("login_logs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  userId: varchar("user_id").notNull(),
+  userId: varchar("user_id"),
   username: varchar("username"),
   email: varchar("email"),
   loginTime: timestamp("login_time").defaultNow(),

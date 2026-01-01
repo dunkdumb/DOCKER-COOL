@@ -7,28 +7,28 @@ import { relations } from "drizzle-orm";
 
 export const profiles = pgTable("profiles", {
   id: serial("id").primaryKey(),
-  userId: varchar("user_id").notNull().references(() => users.id),
-  firstName: text("first_name").notNull(),
-  lastName: text("last_name").notNull(),
-  birthMonth: integer("birth_month").notNull(), // 1-12
-  birthYear: integer("birth_year").notNull(),
-  gender: text("gender").notNull(), // 'Male' | 'Female'
-  country: text("country").notNull(), // Current country
-  city: text("city").notNull(), // Current city
-  nativePlace: text("native_place").notNull(), // Native place in India
-  nativeLanguage: text("native_language").notNull(), // Native language
-  denomination: text("denomination").notNull(),
+  userId: varchar("user_id").references(() => users.id),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
+  birthMonth: integer("birth_month"), // 1-12
+  birthYear: integer("birth_year"),
+  gender: text("gender"), // 'Male' | 'Female'
+  country: text("country"), // Current country
+  city: text("city"), // Current city
+  nativePlace: text("native_place"), // Native place in India
+  nativeLanguage: text("native_language"), // Native language
+  denomination: text("denomination"),
   otherDenomination: text("other_denomination"), // Free-form field when denomination is "Other" (optional)
-  occupation: text("occupation").notNull(),
-  visaType: text("visa_type").notNull(), // H1B, Green Card, Citizen, OPT, etc.
-  height: text("height").notNull(), // Height in feet/inches format e.g. "5'8"
-  yearsInUS: integer("years_in_us").notNull(), // Number of years living in the US
-  aboutMe: text("about_me").notNull(),
-  partnerPreferences: text("partner_preferences").notNull(),
+  occupation: text("occupation"),
+  visaType: text("visa_type"), // H1B, Green Card, Citizen, OPT, etc.
+  height: text("height"), // Height in feet/inches format e.g. "5'8"
+  yearsInUS: integer("years_in_us"), // Number of years living in the US
+  aboutMe: text("about_me"),
+  partnerPreferences: text("partner_preferences"),
   photoUrl: text("photo_url"), // Optional - photo upload
-  phoneNumber: text("phone_number").notNull(),
+  phoneNumber: text("phone_number"),
   phoneVerified: boolean("phone_verified").default(false),
-  createdBy: text("created_by").notNull(), // 'Self', 'Parent', etc.
+  createdBy: text("created_by"), // 'Self', 'Parent', etc.
   createdByName: text("created_by_name"), // Name of person who created profile if not self (optional when Self)
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -36,9 +36,9 @@ export const profiles = pgTable("profiles", {
 export const phoneVerifications = pgTable("phone_verifications", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id"),
-  phoneNumber: text("phone_number").notNull(),
-  code: text("code").notNull(),
-  expiresAt: timestamp("expires_at").notNull(),
+  phoneNumber: text("phone_number"),
+  code: text("code"),
+  expiresAt: timestamp("expires_at"),
   verified: boolean("verified").default(false),
   consumed: boolean("consumed").default(false),
   createdAt: timestamp("created_at").defaultNow(),
