@@ -93,7 +93,6 @@ export const phoneVerificationApi = {
     input: z.object({
       phoneNumber: z.string(),
       code: z.string().length(6, "Code must be 6 digits"),
-      profileId: z.number().optional(),
     }),
     responses: {
       200: z.object({ success: z.boolean(), message: z.string() }),

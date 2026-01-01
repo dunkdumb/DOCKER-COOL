@@ -18,9 +18,14 @@ export interface IStorage {
   }): Promise<Profile[]>;
   getProfile(id: number): Promise<Profile | undefined>;
   getProfileByUserId(userId: string): Promise<Profile | undefined>;
-  createProfile(userId: string, profile: InsertProfile): Promise<Profile>;
+  createProfile(userId: string, profile: InsertProfile, phoneVerified?: boolean): Promise<Profile>;
   updateProfile(id: number, updates: Partial<InsertProfile>): Promise<Profile>;
   deleteProfile(id: number): Promise<void>;
+  createPhoneVerification(userId: string, phoneNumber: string, code: string): Promise<PhoneVerification>;
+  verifyPhoneCode(userId: string, phoneNumber: string, code: string): Promise<boolean>;
+  isPhoneVerifiedForUser(userId: string, phoneNumber: string): Promise<boolean>;
+  consumePhoneVerification(userId: string, phoneNumber: string): Promise<void>;
+  markPhoneVerified(profileId: number): Promise<Profile>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -66,10 +71,10 @@ export class DatabaseStorage implements IStorage {
     return profile;
   }
 
-  async createProfile(userId: string, profile: InsertProfile): Promise<Profile> {
+  async createProfile(userId: string, profile: InsertProfile, phoneVerified: boolean = false): Promise<Profile> {
     const [newProfile] = await db
       .insert(profiles)
-      .values({ ...profile, userId })
+      .values({ ...profile, userId, phoneVerified })
       .returning();
     return newProfile;
   }
@@ -87,26 +92,30 @@ export class DatabaseStorage implements IStorage {
     await db.delete(profiles).where(eq(profiles.id, id));
   }
 
-  async createPhoneVerification(phoneNumber: string, code: string): Promise<PhoneVerification> {
+  async createPhoneVerification(userId: string, phoneNumber: string, code: string): Promise<PhoneVerification> {
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    await db.delete(phoneVerifications).where(eq(phoneVerifications.phoneNumber, phoneNumber));
+    await db.delete(phoneVerifications).where(
+      and(eq(phoneVerifications.userId, userId), eq(phoneVerifications.phoneNumber, phoneNumber))
+    );
     const [verification] = await db
       .insert(phoneVerifications)
-      .values({ phoneNumber, code, expiresAt })
+      .values({ userId, phoneNumber, code, expiresAt })
       .returning();
     return verification;
   }
 
-  async verifyPhoneCode(phoneNumber: string, code: string): Promise<boolean> {
+  async verifyPhoneCode(userId: string, phoneNumber: string, code: string): Promise<boolean> {
     const [verification] = await db
       .select()
       .from(phoneVerifications)
       .where(
         and(
+          eq(phoneVerifications.userId, userId),
           eq(phoneVerifications.phoneNumber, phoneNumber),
           eq(phoneVerifications.code, code),
           gt(phoneVerifications.expiresAt, new Date()),
-          eq(phoneVerifications.verified, false)
+          eq(phoneVerifications.verified, false),
+          eq(phoneVerifications.consumed, false)
         )
       );
 
@@ -120,6 +129,34 @@ export class DatabaseStorage implements IStorage {
       .where(eq(phoneVerifications.id, verification.id));
 
     return true;
+  }
+
+  async isPhoneVerifiedForUser(userId: string, phoneNumber: string): Promise<boolean> {
+    const [verification] = await db
+      .select()
+      .from(phoneVerifications)
+      .where(
+        and(
+          eq(phoneVerifications.userId, userId),
+          eq(phoneVerifications.phoneNumber, phoneNumber),
+          eq(phoneVerifications.verified, true),
+          eq(phoneVerifications.consumed, false)
+        )
+      );
+    return !!verification;
+  }
+
+  async consumePhoneVerification(userId: string, phoneNumber: string): Promise<void> {
+    await db
+      .update(phoneVerifications)
+      .set({ consumed: true })
+      .where(
+        and(
+          eq(phoneVerifications.userId, userId),
+          eq(phoneVerifications.phoneNumber, phoneNumber),
+          eq(phoneVerifications.verified, true)
+        )
+      );
   }
 
   async markPhoneVerified(profileId: number): Promise<Profile> {

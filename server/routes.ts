@@ -48,7 +48,16 @@ export async function registerRoutes(
       const input = api.profiles.create.input.parse(req.body);
       const userId = (req.user as any).claims.sub; // From Replit Auth
       
-      const profile = await storage.createProfile(userId, input);
+      // Check if phone was verified before creating profile
+      let phoneVerified = false;
+      if (input.phoneNumber) {
+        phoneVerified = await storage.isPhoneVerifiedForUser(userId, input.phoneNumber);
+        if (phoneVerified) {
+          await storage.consumePhoneVerification(userId, input.phoneNumber);
+        }
+      }
+      
+      const profile = await storage.createProfile(userId, input, phoneVerified);
       res.status(201).json(profile);
     } catch (err) {
       if (err instanceof z.ZodError) {
@@ -112,17 +121,18 @@ export async function registerRoutes(
     }
   });
 
-  // Phone Verification Routes
-  app.post(phoneVerificationApi.sendCode.path, async (req, res) => {
+  // Phone Verification Routes (require authentication for security)
+  app.post(phoneVerificationApi.sendCode.path, isAuthenticated, async (req, res) => {
     try {
       if (!isTwilioConfigured()) {
         return res.status(500).json({ message: "Phone verification is not configured" });
       }
 
+      const userId = (req.user as any).claims.sub;
       const input = phoneVerificationApi.sendCode.input.parse(req.body);
       const code = generateVerificationCode();
       
-      await storage.createPhoneVerification(input.phoneNumber, code);
+      await storage.createPhoneVerification(userId, input.phoneNumber, code);
       const sent = await sendVerificationSMS(input.phoneNumber, code);
 
       if (!sent) {
@@ -141,17 +151,14 @@ export async function registerRoutes(
     }
   });
 
-  app.post(phoneVerificationApi.verifyCode.path, async (req, res) => {
+  app.post(phoneVerificationApi.verifyCode.path, isAuthenticated, async (req, res) => {
     try {
+      const userId = (req.user as any).claims.sub;
       const input = phoneVerificationApi.verifyCode.input.parse(req.body);
-      const verified = await storage.verifyPhoneCode(input.phoneNumber, input.code);
+      const verified = await storage.verifyPhoneCode(userId, input.phoneNumber, input.code);
 
       if (!verified) {
         return res.status(400).json({ message: "Invalid or expired verification code" });
-      }
-
-      if (input.profileId) {
-        await storage.markPhoneVerified(input.profileId);
       }
 
       res.json({ success: true, message: "Phone number verified successfully" });

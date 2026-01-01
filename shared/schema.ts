@@ -26,10 +26,12 @@ export const profiles = pgTable("profiles", {
 
 export const phoneVerifications = pgTable("phone_verifications", {
   id: serial("id").primaryKey(),
+  userId: varchar("user_id"),
   phoneNumber: text("phone_number").notNull(),
   code: text("code").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   verified: boolean("verified").default(false),
+  consumed: boolean("consumed").default(false),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
