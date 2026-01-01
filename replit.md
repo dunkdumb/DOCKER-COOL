@@ -77,6 +77,13 @@ Routes are defined in `shared/routes.ts` with Zod schemas for input validation. 
 ### Session Configuration
 - Sessions are configured to last 30 days (1 month) for user convenience
 
+### US-Focused Rollout
+- Currently the platform is focused on US users only
+- Other country options are hidden (commented out) in:
+  - `client/src/pages/create-profile.tsx` - Country dropdown
+  - `client/src/pages/profiles.tsx` - Country filter dropdown
+- To expand to other countries, uncomment the country options in both files
+
 ### Pending Features
 - **Email Integration**: SendGrid was not configured (user did not provide credentials). To add email functionality:
   1. Get a SendGrid API key

@@ -196,6 +196,7 @@ export default function CreateProfile() {
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="USA">United States</SelectItem>
+                            {/* Hidden for US-focused rollout - uncomment when expanding to other countries
                             <SelectItem value="Canada">Canada</SelectItem>
                             <SelectItem value="UK">United Kingdom</SelectItem>
                             <SelectItem value="Australia">Australia</SelectItem>
@@ -208,6 +209,7 @@ export default function CreateProfile() {
                             <SelectItem value="Netherlands">Netherlands</SelectItem>
                             <SelectItem value="India">India</SelectItem>
                             <SelectItem value="Other">Other</SelectItem>
+                            */}
                           </SelectContent>
                         </Select>
                         <FormMessage />

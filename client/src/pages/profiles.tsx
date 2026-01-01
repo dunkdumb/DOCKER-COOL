@@ -99,6 +99,7 @@ export default function Profiles() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="USA">United States</SelectItem>
+                  {/* Hidden for US-focused rollout - uncomment when expanding to other countries
                   <SelectItem value="Canada">Canada</SelectItem>
                   <SelectItem value="UK">United Kingdom</SelectItem>
                   <SelectItem value="Australia">Australia</SelectItem>
@@ -108,6 +109,7 @@ export default function Profiles() {
                   <SelectItem value="New Zealand">New Zealand</SelectItem>
                   <SelectItem value="Ireland">Ireland</SelectItem>
                   <SelectItem value="India">India</SelectItem>
+                  */}
                 </SelectContent>
               </Select>
             </div>
