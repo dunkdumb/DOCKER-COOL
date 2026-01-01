@@ -39,6 +39,7 @@ export default function CreateProfile() {
       birthMonth: undefined,
       birthYear: undefined,
       denomination: "",
+      otherDenomination: "",
       location: "",
       occupation: "",
       visaType: "",
@@ -184,7 +185,7 @@ export default function CreateProfile() {
                         <FormLabel>Denomination</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
-                            <SelectTrigger>
+                            <SelectTrigger data-testid="select-denomination">
                               <SelectValue placeholder="Select denomination" />
                             </SelectTrigger>
                           </FormControl>
@@ -202,6 +203,26 @@ export default function CreateProfile() {
                       </FormItem>
                     )}
                   />
+                  {form.watch("denomination") === "Other" && (
+                    <FormField
+                      control={form.control}
+                      name="otherDenomination"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Church/Denomination Name</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="Enter your church or denomination name" 
+                              value={field.value || ""} 
+                              onChange={field.onChange}
+                              data-testid="input-other-denomination"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                   <FormField
                     control={form.control}
                     name="location"

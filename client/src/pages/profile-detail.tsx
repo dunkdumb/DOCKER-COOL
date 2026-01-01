@@ -168,7 +168,11 @@ export default function ProfileDetail() {
                  <div className="space-y-4">
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Denomination</span>
-                     <span className="font-medium">{profile.denomination}</span>
+                     <span className="font-medium">
+                       {profile.denomination === "Other" && profile.otherDenomination 
+                         ? profile.otherDenomination 
+                         : profile.denomination}
+                     </span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Community</span>

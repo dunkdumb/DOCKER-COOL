@@ -14,6 +14,7 @@ export const profiles = pgTable("profiles", {
   birthYear: integer("birth_year").notNull(),
   gender: text("gender").notNull(), // 'Male' | 'Female'
   denomination: text("denomination").notNull(),
+  otherDenomination: text("other_denomination"), // Free-form field when denomination is "Other"
   location: text("location").notNull(),
   occupation: text("occupation"),
   visaType: text("visa_type"), // H1B, Green Card, Citizen, OPT, etc.
