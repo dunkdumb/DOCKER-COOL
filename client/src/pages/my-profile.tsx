@@ -27,7 +27,7 @@ export default function MyProfile() {
   // The list API does NOT filter by userId currently in the definition, so this is a limitation.
   // We will assume that if we are logged in, we can see if we created any profiles.
   
-  const { data: profiles, isLoading: profilesLoading } = useProfiles();
+  const { data: profiles, isLoading: profilesLoading } = useProfiles({});
   const { mutate: deleteProfile } = useDeleteProfile();
 
   if (authLoading || profilesLoading) return <Layout><div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin" /></div></Layout>;
@@ -83,10 +83,11 @@ export default function MyProfile() {
                     </AlertDialogContent>
                   </AlertDialog>
                   
-                  {/* Edit functionality would require an Edit Profile page/dialog, omitted for brevity but button exists */}
-                  <Button variant="secondary" size="icon" className="h-8 w-8">
-                    <Edit className="w-4 h-4" />
-                  </Button>
+                  <Link href={`/edit-profile/${profile.id}`}>
+                    <Button variant="secondary" size="icon" className="h-8 w-8">
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}

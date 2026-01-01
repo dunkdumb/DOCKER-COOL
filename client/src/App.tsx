@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Home from "@/pages/home";
 import Profiles from "@/pages/profiles";
 import CreateProfile from "@/pages/create-profile";
+import EditProfile from "@/pages/edit-profile";
 import ProfileDetail from "@/pages/profile-detail";
 import MyProfile from "@/pages/my-profile";
 
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/profiles" component={Profiles} />
       <Route path="/create-profile" component={CreateProfile} />
+      <Route path="/edit-profile/:id" component={EditProfile} />
       <Route path="/profile/:id" component={ProfileDetail} />
       <Route path="/my-profile" component={MyProfile} />
       <Route component={NotFound} />
