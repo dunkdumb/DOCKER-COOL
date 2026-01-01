@@ -89,6 +89,28 @@ export async function registerRoutes(
     }
   });
 
+  app.delete(api.profiles.delete.path, isAuthenticated, async (req, res) => {
+    try {
+      const profileId = Number(req.params.id);
+      const userId = (req.user as any).claims.sub;
+      
+      const existing = await storage.getProfile(profileId);
+      if (!existing) {
+        return res.status(404).json({ message: 'Profile not found' });
+      }
+
+      // Authorization check: Ensure user owns the profile
+      if (existing.userId !== userId) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      await storage.deleteProfile(profileId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Seed Data
   await seedDatabase();
 

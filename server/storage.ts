@@ -47,6 +47,10 @@ export class DatabaseStorage implements IStorage {
       conditions.push(lte(profiles.age, filters.maxAge));
     }
 
+    if (conditions.length === 0) {
+      return await db.select().from(profiles);
+    }
+
     return await db.select().from(profiles).where(and(...conditions));
   }
 
