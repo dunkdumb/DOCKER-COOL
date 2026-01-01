@@ -266,26 +266,25 @@ export default function CreateProfile() {
                       </FormItem>
                     )}
                   />
-                  {form.watch("denomination") === "Other" && (
-                    <FormField
-                      control={form.control}
-                      name="otherDenomination"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Church/Denomination Name</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter your church or denomination name" 
-                              value={field.value || ""} 
-                              onChange={field.onChange}
-                              data-testid="input-other-denomination"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  )}
+                  <FormField
+                    control={form.control}
+                    name="otherDenomination"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Church/Denomination Name</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder={form.watch("denomination") === "Other" ? "Enter your church or denomination name" : "Select 'Other' above to enter"}
+                            value={field.value || ""} 
+                            onChange={field.onChange}
+                            disabled={form.watch("denomination") !== "Other"}
+                            data-testid="input-other-denomination"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="occupation"
@@ -353,26 +352,29 @@ export default function CreateProfile() {
                       </FormItem>
                     )}
                   />
-                  {form.watch("createdBy") !== "Self" && form.watch("createdBy") && (
-                    <FormField
-                      control={form.control}
-                      name="createdByName"
-                      render={({ field }) => (
+                  <FormField
+                    control={form.control}
+                    name="createdByName"
+                    render={({ field }) => {
+                      const createdBy = form.watch("createdBy");
+                      const isNotSelf = createdBy && createdBy !== "Self";
+                      return (
                         <FormItem>
                           <FormLabel>Your Name</FormLabel>
                           <FormControl>
                             <Input 
-                              placeholder="Enter your name" 
+                              placeholder={isNotSelf ? "Enter your name" : "Only for profiles created by others"}
                               value={field.value || ""} 
                               onChange={field.onChange}
+                              disabled={!isNotSelf}
                               data-testid="input-created-by-name"
                             />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
-                      )}
-                    />
-                  )}
+                      );
+                    }}
+                  />
                 </div>
               </div>
 
