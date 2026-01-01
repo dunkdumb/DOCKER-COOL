@@ -137,7 +137,14 @@ export default function ProfileDetail() {
                  <div className="space-y-4">
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Age</span>
-                     <span className="font-medium">{profile.age} Years</span>
+                     <span className="font-medium">{(() => {
+                       const today = new Date();
+                       const currentYear = today.getFullYear();
+                       const currentMonth = today.getMonth() + 1;
+                       let age = currentYear - profile.birthYear;
+                       if (currentMonth < profile.birthMonth) age--;
+                       return age;
+                     })()} Years</span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Gender</span>

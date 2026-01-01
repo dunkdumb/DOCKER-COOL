@@ -6,9 +6,21 @@ import { Link } from "wouter";
 import type { Profile } from "@shared/schema";
 import { motion } from "framer-motion";
 
+function calculateAge(birthMonth: number, birthYear: number): number {
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  let age = currentYear - birthYear;
+  if (currentMonth < birthMonth) {
+    age--;
+  }
+  return age;
+}
+
 export function ProfileCard({ profile }: { profile: Profile }) {
   // Use a nice placeholder if no photo
   const photoUrl = profile.photoUrl || `https://ui-avatars.com/api/?name=${profile.firstName}+${profile.lastName}&background=fde68a&color=92400e&size=200`;
+  const age = calculateAge(profile.birthMonth, profile.birthYear);
 
   return (
     <motion.div
@@ -27,7 +39,7 @@ export function ProfileCard({ profile }: { profile: Profile }) {
           />
           <div className="absolute top-3 right-3">
              <Badge variant="secondary" className="bg-white/90 text-foreground backdrop-blur-sm shadow-sm font-medium">
-               {profile.age} yrs
+               {age} yrs
              </Badge>
           </div>
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 pt-12">

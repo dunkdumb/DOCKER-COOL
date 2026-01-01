@@ -10,7 +10,8 @@ export const profiles = pgTable("profiles", {
   userId: varchar("user_id").notNull().references(() => users.id),
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  age: integer("age").notNull(),
+  birthMonth: integer("birth_month").notNull(), // 1-12
+  birthYear: integer("birth_year").notNull(),
   gender: text("gender").notNull(), // 'Male' | 'Female'
   denomination: text("denomination").notNull(),
   location: text("location").notNull(),

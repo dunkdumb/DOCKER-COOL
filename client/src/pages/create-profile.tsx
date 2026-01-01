@@ -18,9 +18,10 @@ import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Extend schema with strict types for form
+const currentYear = new Date().getFullYear();
 const formSchema = insertProfileSchema.extend({
-  age: z.coerce.number().min(18, "Must be at least 18"),
-  // photoUrl is optional string
+  birthMonth: z.coerce.number().min(1).max(12),
+  birthYear: z.coerce.number().min(1940).max(currentYear - 18, "Must be at least 18 years old"),
 });
 
 export default function CreateProfile() {
@@ -35,6 +36,8 @@ export default function CreateProfile() {
       firstName: "",
       lastName: "",
       gender: "",
+      birthMonth: undefined,
+      birthYear: undefined,
       denomination: "",
       location: "",
       occupation: "",
@@ -126,11 +129,42 @@ export default function CreateProfile() {
                   />
                   <FormField
                     control={form.control}
-                    name="age"
+                    name="birthMonth"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Age</FormLabel>
-                        <FormControl><Input type="number" placeholder="25" {...field} /></FormControl>
+                        <FormLabel>Birth Month</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value?.toString()}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-birth-month">
+                              <SelectValue placeholder="Select month" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="1">January</SelectItem>
+                            <SelectItem value="2">February</SelectItem>
+                            <SelectItem value="3">March</SelectItem>
+                            <SelectItem value="4">April</SelectItem>
+                            <SelectItem value="5">May</SelectItem>
+                            <SelectItem value="6">June</SelectItem>
+                            <SelectItem value="7">July</SelectItem>
+                            <SelectItem value="8">August</SelectItem>
+                            <SelectItem value="9">September</SelectItem>
+                            <SelectItem value="10">October</SelectItem>
+                            <SelectItem value="11">November</SelectItem>
+                            <SelectItem value="12">December</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="birthYear"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Birth Year</FormLabel>
+                        <FormControl><Input type="number" placeholder="1990" {...field} data-testid="input-birth-year" /></FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
