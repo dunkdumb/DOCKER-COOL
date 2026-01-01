@@ -38,9 +38,11 @@ export default function CreateProfile() {
       gender: "",
       birthMonth: undefined,
       birthYear: undefined,
+      location: "",
+      nativePlace: "",
+      nativeLanguage: "",
       denomination: "",
       otherDenomination: "",
-      location: "",
       occupation: "",
       visaType: "",
       aboutMe: "",
@@ -173,16 +175,76 @@ export default function CreateProfile() {
                 </div>
               </div>
 
-              {/* Religious & Location */}
+              {/* Location & Background */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold border-b pb-2 text-primary">Details</h3>
+                <h3 className="text-lg font-semibold border-b pb-2 text-primary">Location & Background</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Current Location (City, Country)</FormLabel>
+                        <FormControl><Input placeholder="New York, USA" {...field} data-testid="input-location" /></FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="nativePlace"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Native Place in India</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="e.g., Kerala, Tamil Nadu, Punjab" 
+                            value={field.value || ""} 
+                            onChange={field.onChange}
+                            data-testid="input-native-place"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="nativeLanguage"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Native Language</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value || ""}>
+                          <FormControl>
+                            <SelectTrigger data-testid="select-native-language">
+                              <SelectValue placeholder="Select language" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="Malayalam">Malayalam</SelectItem>
+                            <SelectItem value="Tamil">Tamil</SelectItem>
+                            <SelectItem value="Telugu">Telugu</SelectItem>
+                            <SelectItem value="Kannada">Kannada</SelectItem>
+                            <SelectItem value="Hindi">Hindi</SelectItem>
+                            <SelectItem value="Punjabi">Punjabi</SelectItem>
+                            <SelectItem value="Bengali">Bengali</SelectItem>
+                            <SelectItem value="Marathi">Marathi</SelectItem>
+                            <SelectItem value="Gujarati">Gujarati</SelectItem>
+                            <SelectItem value="Konkani">Konkani</SelectItem>
+                            <SelectItem value="English">English</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="denomination"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Denomination</FormLabel>
+                        <FormLabel>Denomination / Church</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger data-testid="select-denomination">
@@ -223,17 +285,6 @@ export default function CreateProfile() {
                       )}
                     />
                   )}
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Location (City, Country)</FormLabel>
-                        <FormControl><Input placeholder="New York, USA" {...field} /></FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
                   <FormField
                     control={form.control}
                     name="occupation"

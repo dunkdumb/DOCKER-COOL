@@ -163,7 +163,7 @@ export default function ProfileDetail() {
 
                <Card className="p-6">
                  <h3 className="font-serif font-bold text-xl mb-4 text-primary flex items-center gap-2">
-                   <Church className="w-5 h-5" /> Religious Details
+                   <Church className="w-5 h-5" /> Background
                  </h3>
                  <div className="space-y-4">
                    <div className="grid grid-cols-2 gap-2">
@@ -175,8 +175,12 @@ export default function ProfileDetail() {
                      </span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
-                     <span className="text-muted-foreground">Community</span>
-                     <span className="font-medium">Christian</span>
+                     <span className="text-muted-foreground">Native Place</span>
+                     <span className="font-medium">{profile.nativePlace || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Native Language</span>
+                     <span className="font-medium">{profile.nativeLanguage || "N/A"}</span>
                    </div>
                  </div>
                </Card>

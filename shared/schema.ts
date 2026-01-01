@@ -13,9 +13,11 @@ export const profiles = pgTable("profiles", {
   birthMonth: integer("birth_month").notNull(), // 1-12
   birthYear: integer("birth_year").notNull(),
   gender: text("gender").notNull(), // 'Male' | 'Female'
+  location: text("location").notNull(), // Current location
+  nativePlace: text("native_place"), // Native place in India
+  nativeLanguage: text("native_language"), // Native language
   denomination: text("denomination").notNull(),
   otherDenomination: text("other_denomination"), // Free-form field when denomination is "Other"
-  location: text("location").notNull(),
   occupation: text("occupation"),
   visaType: text("visa_type"), // H1B, Green Card, Citizen, OPT, etc.
   aboutMe: text("about_me"),
