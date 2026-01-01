@@ -7,7 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, ArrowLeft, MapPin, Briefcase, Book, Edit, Trash2 } from "lucide-react";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { MapPin, Briefcase, Book, Trash2 } from "lucide-react";
 import { useEffect } from "react";
 import { apiRequest } from "@/lib/queryClient";
 import type { Profile } from "@shared/schema";
@@ -72,18 +74,9 @@ export default function MyProfile() {
 
   if (authLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b bg-card">
-          <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <Skeleton className="h-6 w-32" />
-          </div>
-        </header>
-        <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
           <Card>
             <CardHeader>
               <Skeleton className="h-24 w-24 rounded-full" />
@@ -94,6 +87,7 @@ export default function MyProfile() {
             </CardContent>
           </Card>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -108,51 +102,28 @@ export default function MyProfile() {
 
   if (!myProfile) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b bg-card">
-          <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Heart className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-bold">My Profile</h1>
-            </div>
-          </div>
-        </header>
-        <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground mb-4">You haven't created a profile yet.</p>
               <Link href="/create-profile">
-                <Button data-testid="button-create-profile">Create Your Profile</Button>
+                <Button className="bg-accent text-accent-foreground" data-testid="button-create-profile">Create Your Profile</Button>
               </Link>
             </CardContent>
           </Card>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon" data-testid="button-back">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Heart className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-bold">My Profile</h1>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
         <Card>
           <CardHeader>
             <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -247,6 +218,8 @@ export default function MyProfile() {
           </CardContent>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 }

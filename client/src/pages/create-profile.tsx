@@ -11,8 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Heart, ArrowLeft, Phone, CheckCircle2 } from "lucide-react";
-import { Link } from "wouter";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { Phone, CheckCircle2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { apiRequest } from "@/lib/queryClient";
 import { Badge } from "@/components/ui/badge";
@@ -273,22 +274,10 @@ export default function CreateProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Link href="/">
-            <Button variant="ghost" size="icon" data-testid="button-back">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Heart className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-bold">Create Profile</h1>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
         <Card>
           <CardHeader>
             <CardTitle>Create a New Profile</CardTitle>
@@ -495,7 +484,7 @@ export default function CreateProfile() {
 
                 <Button 
                   type="submit" 
-                  className="w-full" 
+                  className="w-full bg-accent text-accent-foreground" 
                   disabled={createMutation.isPending}
                   data-testid="button-submit"
                 >
@@ -506,6 +495,8 @@ export default function CreateProfile() {
           </CardContent>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, ArrowLeft, MapPin, Briefcase, Book } from "lucide-react";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { MapPin, Briefcase, Book } from "lucide-react";
 import { useState } from "react";
 import type { Profile } from "@shared/schema";
 
@@ -36,29 +38,10 @@ export default function Profiles() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <div className="flex items-center gap-2">
-              <Heart className="h-6 w-6 text-primary" />
-              <h1 className="text-xl font-bold">Browse Profiles</h1>
-            </div>
-          </div>
-          {!isAuthenticated && (
-            <a href="/api/login">
-              <Button data-testid="button-login">Login</Button>
-            </a>
-          )}
-        </div>
-      </header>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-8 flex-1">
         <Card className="mb-8">
           <CardHeader>
             <CardTitle>Search Filters</CardTitle>
@@ -181,13 +164,15 @@ export default function Profiles() {
               <p className="text-muted-foreground">No profiles found. Be the first to create one!</p>
               {isAuthenticated && (
                 <Link href="/create-profile">
-                  <Button className="mt-4" data-testid="button-create-first">Create Profile</Button>
+                  <Button className="mt-4 bg-accent text-accent-foreground" data-testid="button-create-first">Create Profile</Button>
                 </Link>
               )}
             </CardContent>
           </Card>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }

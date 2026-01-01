@@ -5,7 +5,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Heart, ArrowLeft, MapPin, Briefcase, Book, Calendar, User } from "lucide-react";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { MapPin, Briefcase, Book, Calendar, User } from "lucide-react";
 import type { Profile } from "@shared/schema";
 
 export default function ProfileDetail() {
@@ -27,18 +29,9 @@ export default function ProfileDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b bg-card">
-          <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-            <Link href="/profiles">
-              <Button variant="ghost" size="icon">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <Skeleton className="h-6 w-32" />
-          </div>
-        </header>
-        <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
           <Card>
             <CardHeader>
               <Skeleton className="h-24 w-24 rounded-full" />
@@ -49,54 +42,35 @@ export default function ProfileDetail() {
             </CardContent>
           </Card>
         </main>
+        <Footer />
       </div>
     );
   }
 
   if (error || !profile) {
     return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b bg-card">
-          <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-            <Link href="/profiles">
-              <Button variant="ghost" size="icon" data-testid="button-back">
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-            </Link>
-            <Heart className="h-6 w-6 text-primary" />
-          </div>
-        </header>
-        <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
           <Card>
             <CardContent className="py-12 text-center">
               <p className="text-muted-foreground">Profile not found</p>
               <Link href="/profiles">
-                <Button className="mt-4" data-testid="button-back-to-profiles">Back to Profiles</Button>
+                <Button className="mt-4 bg-accent text-accent-foreground" data-testid="button-back-to-profiles">Back to Profiles</Button>
               </Link>
             </CardContent>
           </Card>
         </main>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-card">
-        <div className="container mx-auto px-4 py-4 flex items-center gap-4">
-          <Link href="/profiles">
-            <Button variant="ghost" size="icon" data-testid="button-back">
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Heart className="h-6 w-6 text-primary" />
-            <h1 className="text-xl font-bold">Profile Details</h1>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
 
-      <main className="container mx-auto px-4 py-8 max-w-2xl">
+      <main className="container mx-auto px-4 py-8 max-w-2xl flex-1">
         <Card>
           <CardHeader>
             <div className="flex flex-col sm:flex-row items-center gap-6">
@@ -185,6 +159,8 @@ export default function ProfileDetail() {
           </CardContent>
         </Card>
       </main>
+
+      <Footer />
     </div>
   );
 }
