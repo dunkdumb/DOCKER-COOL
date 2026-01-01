@@ -14,7 +14,8 @@ import { Card } from "@/components/ui/card";
 import { insertProfileSchema } from "@shared/schema";
 import { useLocation } from "wouter";
 import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, HelpCircle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 
 // Extend schema with strict types for form
@@ -236,7 +237,17 @@ export default function CreateProfile() {
                       const cities = country ? (cityOptions[country] || ["Other"]) : [];
                       return (
                         <FormItem>
-                          <FormLabel>City</FormLabel>
+                          <FormLabel className="flex items-center gap-1">
+                            City
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <HelpCircle className="w-4 h-4 text-muted-foreground cursor-help" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>If your city is not listed, select the nearest city</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!country}>
                             <FormControl>
                               <SelectTrigger data-testid="select-city">
