@@ -60,7 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </div>
             ) : (
               <Button asChild className="bg-primary hover:bg-primary/90 text-white shadow-md">
-                <a href="/api/login">Login / Sign Up</a>
+                <Link href="/login">Login / Sign Up</Link>
               </Button>
             )}
           </div>
@@ -93,7 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </div>
                   ) : (
                     <Button asChild className="w-full bg-primary text-white">
-                      <a href="/api/login">Login / Sign Up</a>
+                      <Link href="/login">Login / Sign Up</Link>
                     </Button>
                   )}
                 </div>

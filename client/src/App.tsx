@@ -10,11 +10,17 @@ import CreateProfile from "@/pages/create-profile";
 import EditProfile from "@/pages/edit-profile";
 import ProfileDetail from "@/pages/profile-detail";
 import MyProfile from "@/pages/my-profile";
+import Login from "@/pages/login";
+import Register from "@/pages/register";
+import ForgotPassword from "@/pages/forgot-password";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
+      <Route path="/forgot-password" component={ForgotPassword} />
       <Route path="/profiles" component={Profiles} />
       <Route path="/create-profile" component={CreateProfile} />
       <Route path="/edit-profile/:id" component={EditProfile} />

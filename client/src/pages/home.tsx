@@ -52,11 +52,11 @@ export default function Home() {
                 </Button>
               </Link>
               {!isAuthenticated && (
-                <a href="/api/login">
+                <Link href="/register">
                   <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 font-bold text-lg px-8 py-6 rounded-full backdrop-blur-sm">
                     Register Free
                   </Button>
-                </a>
+                </Link>
               )}
             </div>
           </motion.div>
