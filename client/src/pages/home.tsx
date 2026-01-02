@@ -63,22 +63,7 @@ export default function Home() {
               )}
             </div>
 
-            <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/20">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">1000+</div>
-                <div className="text-white/70 text-sm">Active Profiles</div>
-              </div>
-              <div className="w-px h-10 bg-white/30" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">50+</div>
-                <div className="text-white/70 text-sm">Success Stories</div>
-              </div>
-              <div className="w-px h-10 bg-white/30" />
-              <div className="text-center">
-                <div className="text-2xl font-bold text-white">100%</div>
-                <div className="text-white/70 text-sm">Verified</div>
-              </div>
-            </div>
+            
           </motion.div>
         </div>
       </section>
