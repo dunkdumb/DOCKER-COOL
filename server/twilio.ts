@@ -20,12 +20,68 @@ export function generateVerificationCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-export async function sendVerificationSMS(phoneNumber: string, code: string): Promise<boolean> {
+export interface PhoneLookupResult {
+  isValid: boolean;
+  isVoip: boolean;
+  carrierType: string | null;
+  carrierName: string | null;
+  errorMessage?: string;
+}
+
+export async function lookupPhoneNumber(phoneNumber: string): Promise<PhoneLookupResult> {
+  try {
+    const twilioClient = getClient();
+    
+    const lookup = await twilioClient.lookups.v2
+      .phoneNumbers(phoneNumber)
+      .fetch({ fields: "line_type_intelligence" });
+    
+    const lineTypeInfo = lookup.lineTypeIntelligence as { type?: string; carrier_name?: string } | null;
+    const carrierType = lineTypeInfo?.type || null;
+    const carrierName = lineTypeInfo?.carrier_name || null;
+    
+    const isVoip = carrierType === "voip" || carrierType === "nonFixedVoip";
+    
+    return {
+      isValid: true,
+      isVoip,
+      carrierType,
+      carrierName,
+    };
+  } catch (error: any) {
+    console.error("Phone lookup failed:", error);
+    return {
+      isValid: false,
+      isVoip: false,
+      carrierType: null,
+      carrierName: null,
+      errorMessage: error.message || "Failed to verify phone number",
+    };
+  }
+}
+
+export async function sendVerificationSMS(phoneNumber: string, code: string): Promise<{ success: boolean; error?: string }> {
   try {
     const twilioClient = getClient();
     
     if (!twilioPhoneNumber) {
       throw new Error("Twilio phone number not configured");
+    }
+
+    const lookupResult = await lookupPhoneNumber(phoneNumber);
+    
+    if (!lookupResult.isValid) {
+      return { 
+        success: false, 
+        error: lookupResult.errorMessage || "Invalid phone number" 
+      };
+    }
+    
+    if (lookupResult.isVoip) {
+      return { 
+        success: false, 
+        error: "VOIP numbers are not allowed. Please use a mobile phone number." 
+      };
     }
 
     await twilioClient.messages.create({
@@ -34,10 +90,13 @@ export async function sendVerificationSMS(phoneNumber: string, code: string): Pr
       to: phoneNumber,
     });
 
-    return true;
-  } catch (error) {
+    return { success: true };
+  } catch (error: any) {
     console.error("Failed to send SMS:", error);
-    return false;
+    return { 
+      success: false, 
+      error: error.message || "Failed to send verification code" 
+    };
   }
 }
 

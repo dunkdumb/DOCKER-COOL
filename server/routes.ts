@@ -187,13 +187,13 @@ export async function registerRoutes(
       const input = phoneVerificationApi.sendCode.input.parse(req.body);
       const code = generateVerificationCode();
       
-      await storage.createPhoneVerification(userId, input.phoneNumber, code);
-      const sent = await sendVerificationSMS(input.phoneNumber, code);
+      const result = await sendVerificationSMS(input.phoneNumber, code);
 
-      if (!sent) {
-        return res.status(500).json({ message: "Failed to send verification code" });
+      if (!result.success) {
+        return res.status(400).json({ message: result.error || "Failed to send verification code" });
       }
 
+      await storage.createPhoneVerification(userId, input.phoneNumber, code);
       res.json({ success: true, message: "Verification code sent" });
     } catch (err) {
       if (err instanceof z.ZodError) {
