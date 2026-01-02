@@ -1,6 +1,10 @@
-import type { Express } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import type { Server } from "http";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import session from "express-session";
+import passport from "passport";
+import connectPgSimple from "connect-pg-simple";
+import { pool } from "./db";
+import authRoutes, { isAuthenticated } from "./auth-routes";
 import { storage } from "./storage";
 import { api, phoneVerificationApi } from "@shared/routes";
 import { z } from "zod";
@@ -11,9 +15,27 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Setup Authentication
-  await setupAuth(app);
-  registerAuthRoutes(app);
+  // Setup Session
+  const PgStore = connectPgSimple(session);
+  app.use(
+    session({
+      store: new PgStore({ pool, tableName: "sessions" }),
+      secret: process.env.SESSION_SECRET || "nri-christian-matrimony-secret",
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      },
+    })
+  );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // Auth Routes
+  app.use("/api/auth", authRoutes);
 
   // Profile Routes
 
@@ -47,7 +69,7 @@ export async function registerRoutes(
   app.post(api.profiles.create.path, isAuthenticated, async (req, res) => {
     try {
       const input = api.profiles.create.input.parse(req.body);
-      const userId = (req.user as any).claims.sub; // From Replit Auth
+      const userId = req.session.userId!;
       
       // Check if phone was verified before creating profile
       let phoneVerified = false;
@@ -89,7 +111,7 @@ export async function registerRoutes(
   app.put(api.profiles.update.path, isAuthenticated, async (req, res) => {
     try {
       const profileId = Number(req.params.id);
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       
       const existing = await storage.getProfile(profileId);
       if (!existing) {
@@ -134,7 +156,7 @@ export async function registerRoutes(
   app.delete(api.profiles.delete.path, isAuthenticated, async (req, res) => {
     try {
       const profileId = Number(req.params.id);
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       
       const existing = await storage.getProfile(profileId);
       if (!existing) {
@@ -160,7 +182,7 @@ export async function registerRoutes(
         return res.status(500).json({ message: "Phone verification is not configured" });
       }
 
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       const input = phoneVerificationApi.sendCode.input.parse(req.body);
       const code = generateVerificationCode();
       
@@ -185,7 +207,7 @@ export async function registerRoutes(
 
   app.post(phoneVerificationApi.verifyCode.path, isAuthenticated, async (req, res) => {
     try {
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       const input = phoneVerificationApi.verifyCode.input.parse(req.body);
       const verified = await storage.verifyPhoneCode(userId, input.phoneNumber, input.code);
 
@@ -210,7 +232,7 @@ export async function registerRoutes(
   // Get all profiles (admin only)
   app.get("/api/admin/profiles", isAuthenticated, async (req, res) => {
     try {
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       const isAdmin = await storage.isUserAdmin(userId);
       
       if (!isAdmin) {
@@ -227,7 +249,7 @@ export async function registerRoutes(
   // Set user as admin (admin only - for initial setup, first user can use SQL)
   app.post("/api/admin/set-admin", isAuthenticated, async (req, res) => {
     try {
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       const isAdmin = await storage.isUserAdmin(userId);
       
       if (!isAdmin) {
@@ -245,7 +267,7 @@ export async function registerRoutes(
   // Manually trigger daily login report (admin only)
   app.post("/api/admin/send-login-report", isAuthenticated, async (req, res) => {
     try {
-      const userId = (req.user as any).claims.sub;
+      const userId = req.session.userId!;
       const isAdmin = await storage.isUserAdmin(userId);
       
       if (!isAdmin) {

@@ -87,12 +87,12 @@ export async function sendProfileNotification(
   action: 'created' | 'updated',
   profileId: number,
   profileData: {
-    firstName: string;
-    lastName: string;
-    gender: string;
-    city: string;
-    country: string;
-    denomination: string;
+    firstName: string | null;
+    lastName: string | null;
+    gender: string | null;
+    city: string | null;
+    country: string | null;
+    denomination: string | null;
   }
 ): Promise<void> {
   const subject = `Profile ${action === 'created' ? 'Created' : 'Updated'}: Profile #${profileId}`;
@@ -100,10 +100,10 @@ export async function sendProfileNotification(
   const htmlBody = `
     <h2>Profile ${action === 'created' ? 'Created' : 'Updated'}</h2>
     <p><strong>Profile ID:</strong> ${profileId}</p>
-    <p><strong>Name:</strong> ${profileData.firstName} ${profileData.lastName}</p>
-    <p><strong>Gender:</strong> ${profileData.gender}</p>
-    <p><strong>Location:</strong> ${profileData.city}, ${profileData.country}</p>
-    <p><strong>Denomination:</strong> ${profileData.denomination}</p>
+    <p><strong>Name:</strong> ${profileData.firstName || 'N/A'} ${profileData.lastName || ''}</p>
+    <p><strong>Gender:</strong> ${profileData.gender || 'N/A'}</p>
+    <p><strong>Location:</strong> ${profileData.city || 'N/A'}, ${profileData.country || 'N/A'}</p>
+    <p><strong>Denomination:</strong> ${profileData.denomination || 'N/A'}</p>
     <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
     <hr>
     <p><em>This is an automated notification from NRIChristianMatrimony.</em></p>
@@ -113,7 +113,7 @@ export async function sendProfileNotification(
 }
 
 export async function sendDailyLoginReport(logins: Array<{
-  userId: string;
+  userId: string | null;
   username: string;
   loginTime: Date;
 }>): Promise<void> {
