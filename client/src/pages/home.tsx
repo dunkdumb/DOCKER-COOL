@@ -35,12 +35,12 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="max-w-xl"
           >
-            <span className="inline-block text-amber-300 text-sm font-semibold tracking-wider uppercase mb-4">
+            <span className="inline-block text-yellow-300 text-sm font-semibold tracking-wider uppercase mb-4">
               Christian Matrimony for NRIs
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight">
               Find Your <br/>
-              <span className="text-amber-300">Soulmate</span> in Faith
+              <span className="text-yellow-300">Soulmate</span> in Faith
             </h1>
             <p className="text-lg md:text-xl text-white/90 mb-8 font-light leading-relaxed">
               Join thousands of Christian families worldwide in finding meaningful, 
@@ -49,7 +49,7 @@ export default function Home() {
             
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/profiles">
-                <Button size="lg" className="bg-amber-500 text-white font-semibold rounded-full shadow-xl" data-testid="button-hero-browse">
+                <Button size="lg" className="bg-yellow-500 text-gray-900 font-semibold rounded-full shadow-xl" data-testid="button-hero-browse">
                   <Search className="w-5 h-5 mr-2" />
                   Browse Profiles
                 </Button>
@@ -84,7 +84,7 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-24 bg-gradient-to-b from-background to-amber-50/30 dark:to-amber-950/10">
+      <section className="py-24 bg-gradient-to-b from-background to-yellow-50/30 dark:to-yellow-950/10">
         <div className="container mx-auto px-4 max-w-6xl">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -93,7 +93,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
             className="text-center mb-16"
           >
-            <span className="text-amber-600 dark:text-amber-400 text-sm font-semibold tracking-wider uppercase">Our Promise</span>
+            <span className="text-primary text-sm font-semibold tracking-wider uppercase">Our Promise</span>
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-2 mb-4">Why Families Trust Us</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">We are committed to helping Christian families find meaningful connections rooted in shared faith and values.</p>
           </motion.div>
@@ -106,7 +106,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.1 }}
               className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
                 <Globe className="w-7 h-7" />
               </div>
               <h3 className="text-lg font-bold mb-2 text-foreground">Global NRI Reach</h3>
@@ -120,7 +120,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
                 <Shield className="w-7 h-7" />
               </div>
               <h3 className="text-lg font-bold mb-2 text-foreground">Verified Profiles</h3>
@@ -134,7 +134,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
                 <Church className="w-7 h-7" />
               </div>
               <h3 className="text-lg font-bold mb-2 text-foreground">Denomination Focused</h3>
@@ -148,7 +148,7 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+              <div className="w-14 h-14 bg-gradient-to-br from-primary to-primary/80 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
                 <Users className="w-7 h-7" />
               </div>
               <h3 className="text-lg font-bold mb-2 text-foreground">Family Involvement</h3>
@@ -169,7 +169,7 @@ export default function Home() {
             className="flex flex-wrap justify-between items-end gap-4 mb-12"
           >
             <div>
-              <span className="text-amber-600 dark:text-amber-400 text-sm font-semibold tracking-wider uppercase">Meet Our Members</span>
+              <span className="text-primary text-sm font-semibold tracking-wider uppercase">Meet Our Members</span>
               <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-2">Featured Profiles</h2>
             </div>
             <Link href="/profiles">
@@ -197,7 +197,7 @@ export default function Home() {
               <h3 className="text-lg font-semibold text-foreground mb-2">No profiles yet</h3>
               <p className="text-muted-foreground mb-6">Be the first to create your profile and start your journey!</p>
               <Link href="/create-profile">
-                <Button className="bg-amber-500 text-white" data-testid="button-empty-create-profile">Create Your Profile</Button>
+                <Button className="bg-primary text-white" data-testid="button-empty-create-profile">Create Your Profile</Button>
               </Link>
             </div>
           )}
@@ -205,7 +205,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-amber-600 to-amber-700 text-white">
+      <section className="py-20 bg-gradient-to-r from-primary to-primary/90 text-white">
         <div className="container mx-auto px-4 max-w-4xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -219,7 +219,7 @@ export default function Home() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/register">
-                <Button size="lg" className="bg-white text-amber-700 font-semibold rounded-full" data-testid="button-cta-register">
+                <Button size="lg" className="bg-yellow-400 text-gray-900 font-semibold rounded-full" data-testid="button-cta-register">
                   Get Started Free
                 </Button>
               </Link>

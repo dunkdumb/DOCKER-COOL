@@ -1,9 +1,10 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Heart, Menu, X, User as UserIcon } from "lucide-react";
+import { Menu, X, User as UserIcon } from "lucide-react";
 import { useState } from "react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import logoImage from "@assets/image_(4)_1767329701678.png";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { user, isAuthenticated, logout } = useAuth();
@@ -26,12 +27,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-              <Heart className="w-5 h-5 text-primary fill-primary/20" />
-            </div>
-            <span className="font-serif text-xl font-bold text-foreground">
-              NRI <span className="text-primary">Christian</span> Matrimony
-            </span>
+            <img src={logoImage} alt="NRI Christian Matrimony" className="h-12 w-auto" />
           </Link>
 
           {/* Desktop Nav */}
@@ -124,9 +120,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <h3 className="font-serif text-lg font-bold mb-4">
-                NRI Christian Matrimony
-              </h3>
+              <img src={logoImage} alt="NRI Christian Matrimony" className="h-16 w-auto mb-4" />
               <p className="text-sm text-muted-foreground max-w-sm leading-relaxed">
                 Connecting hearts in faith across borders. We are dedicated to
                 helping NRI Christians find their perfect life partner within
