@@ -1,11 +1,12 @@
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { Search, Heart, Shield, Globe } from "lucide-react";
+import { Search, Heart, Shield, Globe, Users, Church } from "lucide-react";
 import { useProfiles } from "@/hooks/use-profiles";
 import { ProfileCard } from "@/components/profile-card";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
+import heroImage from "@assets/nrichristian_1767329613951.png";
 
 export default function Home() {
   const { data: profiles, isLoading } = useProfiles();
@@ -17,98 +18,166 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Unsplash image: Wedding couple, elegant, cinematic */}
-        {/* <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80" /> */}
+      <section className="relative min-h-[650px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-           <img 
-            src="https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2070&auto=format&fit=crop" 
-            alt="Wedding Background" 
-            className="w-full h-full object-cover"
-           />
-           <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-purple-900/80 mix-blend-multiply" />
-           <div className="absolute inset-0 bg-black/30" />
+          <img 
+            src={heroImage}
+            alt="Christian Wedding Couple" 
+            className="w-full h-full object-cover object-right"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         </div>
 
-        <div className="container relative z-10 px-4 text-center">
+        <div className="container relative z-10 px-6 md:px-12 max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
+            className="max-w-xl"
           >
-            <h1 className="text-4xl md:text-6xl font-serif font-bold text-white mb-6 drop-shadow-lg leading-tight">
-              Faith-Centered Unions <br/> Across Borders
+            <span className="inline-block text-amber-300 text-sm font-semibold tracking-wider uppercase mb-4">
+              Christian Matrimony for NRIs
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mb-6 leading-tight">
+              Find Your <br/>
+              <span className="text-amber-300">Soulmate</span> in Faith
             </h1>
-            <p className="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
-              Find your perfect match within the global Christian community. 
-              Safe, secure, and dedicated to building Christ-centered families.
+            <p className="text-lg md:text-xl text-white/90 mb-8 font-light leading-relaxed">
+              Join thousands of Christian families worldwide in finding meaningful, 
+              faith-centered unions. Your perfect match awaits.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/profiles">
-                <Button size="lg" className="bg-white text-primary hover:bg-gray-100 font-bold text-lg px-8 py-6 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-1">
+                <Button size="lg" className="bg-amber-500 text-white font-semibold rounded-full shadow-xl" data-testid="button-hero-browse">
                   <Search className="w-5 h-5 mr-2" />
                   Browse Profiles
                 </Button>
               </Link>
               {!isAuthenticated && (
                 <Link href="/register">
-                  <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10 font-bold text-lg px-8 py-6 rounded-full backdrop-blur-sm">
+                  <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/50 font-semibold rounded-full backdrop-blur-sm" data-testid="button-hero-register">
                     Register Free
                   </Button>
                 </Link>
               )}
+            </div>
+
+            <div className="flex items-center gap-6 mt-10 pt-8 border-t border-white/20">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">1000+</div>
+                <div className="text-white/70 text-sm">Active Profiles</div>
+              </div>
+              <div className="w-px h-10 bg-white/30" />
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">50+</div>
+                <div className="text-white/70 text-sm">Success Stories</div>
+              </div>
+              <div className="w-px h-10 bg-white/30" />
+              <div className="text-center">
+                <div className="text-2xl font-bold text-white">100%</div>
+                <div className="text-white/70 text-sm">Verified</div>
+              </div>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-4">Why Choose Us?</h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full" />
-          </div>
+      <section className="py-24 bg-gradient-to-b from-background to-amber-50/30 dark:to-amber-950/10">
+        <div className="container mx-auto px-4 max-w-6xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <span className="text-amber-600 dark:text-amber-400 text-sm font-semibold tracking-wider uppercase">Our Promise</span>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-2 mb-4">Why Families Trust Us</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">We are committed to helping Christian families find meaningful connections rooted in shared faith and values.</p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                <Globe className="w-8 h-8" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+                <Globe className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Global NRI Reach</h3>
-              <p className="text-muted-foreground">Connecting Christian families from USA, UK, Canada, Australia, and beyond.</p>
-            </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                <Shield className="w-8 h-8" />
+              <h3 className="text-lg font-bold mb-2 text-foreground">Global NRI Reach</h3>
+              <p className="text-muted-foreground text-sm">Connecting Christian families from USA, UK, Canada, Australia, and beyond.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+                <Shield className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Verified Profiles</h3>
-              <p className="text-muted-foreground">Manual verification and phone validation to ensure genuine profiles.</p>
-            </div>
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-6">
-                <Heart className="w-8 h-8" />
+              <h3 className="text-lg font-bold mb-2 text-foreground">Verified Profiles</h3>
+              <p className="text-muted-foreground text-sm">Manual verification and phone validation to ensure genuine profiles.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+                <Church className="w-7 h-7" />
               </div>
-              <h3 className="text-xl font-bold mb-3">Denomination Focused</h3>
-              <p className="text-muted-foreground">Filter matches by specific denominations to find shared faith values.</p>
-            </div>
+              <h3 className="text-lg font-bold mb-2 text-foreground">Denomination Focused</h3>
+              <p className="text-muted-foreground text-sm">Filter matches by specific denominations to find shared faith values.</p>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="bg-card rounded-2xl p-8 shadow-sm border border-border/50 text-center group hover:shadow-lg transition-shadow"
+            >
+              <div className="w-14 h-14 bg-gradient-to-br from-amber-400 to-amber-600 text-white rounded-xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform">
+                <Users className="w-7 h-7" />
+              </div>
+              <h3 className="text-lg font-bold mb-2 text-foreground">Family Involvement</h3>
+              <p className="text-muted-foreground text-sm">Parents and family members can create profiles on behalf of their loved ones.</p>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Featured Profiles Section */}
-      <section className="py-20 bg-secondary/20">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-12">
+      <section className="py-24 bg-card">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-wrap justify-between items-end gap-4 mb-12"
+          >
             <div>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mb-2">Featured Profiles</h2>
-              <p className="text-muted-foreground">Discover recently active members</p>
+              <span className="text-amber-600 dark:text-amber-400 text-sm font-semibold tracking-wider uppercase">Meet Our Members</span>
+              <h2 className="text-3xl md:text-4xl font-serif font-bold text-foreground mt-2">Featured Profiles</h2>
             </div>
             <Link href="/profiles">
-              <Button variant="ghost" className="text-primary font-semibold">View All</Button>
+              <Button variant="outline" className="font-semibold" data-testid="button-view-all-profiles">
+                View All Profiles
+              </Button>
             </Link>
-          </div>
+          </motion.div>
 
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -116,13 +185,51 @@ export default function Home() {
                 <div key={i} className="h-96 bg-muted rounded-2xl animate-pulse" />
               ))}
             </div>
-          ) : (
+          ) : featuredProfiles.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredProfiles.map((profile) => (
                 <ProfileCard key={profile.id} profile={profile} />
               ))}
             </div>
+          ) : (
+            <div className="text-center py-16 bg-muted/30 rounded-2xl">
+              <Heart className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-foreground mb-2">No profiles yet</h3>
+              <p className="text-muted-foreground mb-6">Be the first to create your profile and start your journey!</p>
+              <Link href="/create-profile">
+                <Button className="bg-amber-500 text-white" data-testid="button-empty-create-profile">Create Your Profile</Button>
+              </Link>
+            </div>
           )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-amber-600 to-amber-700 text-white">
+        <div className="container mx-auto px-4 max-w-4xl text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">Ready to Find Your Soulmate?</h2>
+            <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
+              Join our community of faith-focused singles and families. Your perfect match could be just a click away.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link href="/register">
+                <Button size="lg" className="bg-white text-amber-700 font-semibold rounded-full" data-testid="button-cta-register">
+                  Get Started Free
+                </Button>
+              </Link>
+              <Link href="/profiles">
+                <Button size="lg" variant="outline" className="border-white text-white font-semibold rounded-full" data-testid="button-cta-browse">
+                  Browse Profiles
+                </Button>
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
     </Layout>
