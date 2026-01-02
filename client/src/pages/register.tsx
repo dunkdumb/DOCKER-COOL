@@ -38,7 +38,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [verificationStep, setVerificationStep] = useState(false);
-  const [tempData, setTempData] = useState<{ email: string; passwordHash: string; firstName: string; lastName: string } | null>(null);
+  const [pendingEmail, setPendingEmail] = useState("");
 
   const registerForm = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -62,7 +62,7 @@ export default function RegisterPage() {
     },
     onSuccess: (result) => {
       if (result.requiresVerification) {
-        setTempData(result.tempData);
+        setPendingEmail(result.email);
         setVerificationStep(true);
         toast({ title: "Code sent", description: "Check your email for the verification code" });
       }
@@ -74,13 +74,8 @@ export default function RegisterPage() {
 
   const verifyMutation = useMutation({
     mutationFn: async (data: VerifyFormData) => {
-      if (!tempData) throw new Error("Missing registration data");
       const res = await apiRequest("POST", "/api/auth/verify-register", {
-        email: tempData.email,
         code: data.code,
-        passwordHash: tempData.passwordHash,
-        firstName: tempData.firstName,
-        lastName: tempData.lastName,
       });
       return res.json();
     },
@@ -246,7 +241,7 @@ export default function RegisterPage() {
             <Form {...verifyForm}>
               <form onSubmit={verifyForm.handleSubmit((data) => verifyMutation.mutate(data))} className="space-y-4">
                 <p className="text-sm text-muted-foreground text-center">
-                  Enter the 6-digit code sent to {tempData?.email}
+                  Enter the 6-digit code sent to {pendingEmail}
                 </p>
                 <FormField
                   control={verifyForm.control}

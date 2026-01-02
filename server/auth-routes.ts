@@ -21,6 +21,12 @@ declare module "express-session" {
     userId?: string;
     pendingEmail?: string;
     pendingAction?: 'login' | 'register' | 'reset';
+    pendingRegistration?: {
+      email: string;
+      passwordHash: string;
+      firstName?: string;
+      lastName?: string;
+    };
   }
 }
 
@@ -105,16 +111,17 @@ router.post("/register", async (req: Request, res: Response) => {
     const code = await createOTP(email, "register");
     await sendOTPEmail(email, code, "register");
 
+    const passwordHash = await hashPassword(password);
+    
     req.session.pendingEmail = email;
     req.session.pendingAction = "register";
-
-    const passwordHash = await hashPassword(password);
+    req.session.pendingRegistration = { email, passwordHash, firstName, lastName };
     
     req.session.save(() => {
       res.json({ 
         message: "Verification code sent to your email",
         requiresVerification: true,
-        tempData: { email, passwordHash, firstName, lastName }
+        email,
       });
     });
   } catch (error) {
@@ -125,11 +132,14 @@ router.post("/register", async (req: Request, res: Response) => {
 
 router.post("/verify-register", async (req: Request, res: Response) => {
   try {
-    const { email, code, passwordHash, firstName, lastName } = req.body;
+    const { code } = req.body;
+    const pendingRegistration = req.session.pendingRegistration;
 
-    if (!email || !code || !passwordHash) {
-      return res.status(400).json({ message: "Missing required fields" });
+    if (!pendingRegistration || !code) {
+      return res.status(400).json({ message: "Missing registration data. Please start over." });
     }
+
+    const { email, passwordHash, firstName, lastName } = pendingRegistration;
 
     const isValid = await verifyOTP(email, code, "register");
     if (!isValid) {
@@ -144,6 +154,9 @@ router.post("/verify-register", async (req: Request, res: Response) => {
       emailVerified: true,
     });
 
+    delete req.session.pendingRegistration;
+    delete req.session.pendingEmail;
+    delete req.session.pendingAction;
     req.session.userId = user.id;
     await storage.logUserLogin(user.id, email, email);
 
