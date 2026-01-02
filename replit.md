@@ -2,7 +2,7 @@
 
 ## Overview
 
-A Christian matrimony platform designed for NRI (Non-Resident Indian) communities. Users can create profiles, browse potential matches, and filter by various criteria including denomination, location, age, and gender. The application uses Replit Auth for authentication and PostgreSQL for data persistence.
+A Christian matrimony platform designed for NRI (Non-Resident Indian) communities. Users can create profiles, browse potential matches, and filter by various criteria including denomination, location, age, and gender. The application uses custom authentication (email/password, email OTP, Google OAuth) and PostgreSQL for data persistence.
 
 ## User Preferences
 
@@ -22,16 +22,17 @@ Database approach: Do NOT add schema-level validations (like NOT NULL constraint
 ### Backend Architecture
 - **Framework**: Express.js with TypeScript
 - **API Pattern**: RESTful API with typed route definitions in `shared/routes.ts`
-- **Authentication**: Replit Auth integration using OpenID Connect (OIDC)
-- **Session Management**: PostgreSQL-backed sessions via connect-pg-simple
+- **Authentication**: Custom auth with email/password, email OTP, and Google OAuth
+- **Session Management**: PostgreSQL-backed sessions via connect-pg-simple (30-day expiry)
 
 ### Data Storage
 - **Database**: PostgreSQL
 - **ORM**: Drizzle ORM with Zod validation schemas
 - **Schema Location**: `shared/schema.ts` defines all database tables
 - **Key Tables**:
-  - `users`: Stores authenticated user information with admin flag (required for Replit Auth)
-  - `sessions`: Session storage (required for Replit Auth)
+  - `users`: Stores user information with passwordHash, email, googleId, admin flag
+  - `sessions`: Session storage for express-session
+  - `otp_codes`: Email verification codes with expiry (10 minutes)
   - `profiles`: Matrimony profile data linked to users
   - `login_logs`: Tracks user logins for daily reports
 
@@ -39,7 +40,8 @@ Database approach: Do NOT add schema-level validations (like NOT NULL constraint
 - **`client/`**: React frontend application
 - **`server/`**: Express backend with API routes
 - **`shared/`**: Shared types, schemas, and route definitions between frontend and backend
-- **`server/replit_integrations/auth/`**: Replit Auth implementation
+- **`server/auth-service.ts`**: Authentication service (password hashing, OTP, user management)
+- **`server/auth-routes.ts`**: Auth API routes (register, login, logout, OTP, Google OAuth)
 - **`server/gmail.ts`**: Gmail integration for sending emails
 
 ### API Structure
@@ -63,8 +65,13 @@ Routes are defined in `shared/routes.ts` with Zod schemas for input validation. 
 - Drizzle Kit for schema migrations (`npm run db:push`)
 
 ### Authentication
-- Replit Auth (OpenID Connect)
-- Requires `ISSUER_URL`, `REPL_ID`, and `SESSION_SECRET` environment variables
+- Custom authentication system with three methods:
+  1. **Email/Password**: bcrypt hashing (cost factor 12), 8+ character passwords
+  2. **Email OTP**: 6-digit codes sent via Gmail, 10-minute expiry
+  3. **Google OAuth**: Passport.js integration with `passport-google-oauth20`
+- Requires `SESSION_SECRET` environment variable
+- For Google OAuth: requires `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables
+- Sessions last 30 days with SameSite=lax cookie protection
 
 ### UI Libraries
 - Radix UI primitives for accessible components
