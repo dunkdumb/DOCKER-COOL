@@ -4,17 +4,30 @@ import { useRoute, Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { MapPin, Briefcase, Church, User, Heart, Phone, ArrowLeft, Loader2, CheckCircle } from "lucide-react";
+import { MapPin, Church, User, Heart, ArrowLeft, Loader2, CheckCircle, Mail, Shield } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+
+function getDisplayProfileId(id: number): string {
+  return `NRI${14700 + id}`;
+}
+
+function calculateAge(birthMonth: number | null, birthYear: number | null): number | null {
+  if (birthMonth === null || birthYear === null) return null;
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  let age = currentYear - birthYear;
+  if (currentMonth < birthMonth) {
+    age--;
+  }
+  return age;
+}
 
 export default function ProfileDetail() {
   const [, params] = useRoute("/profile/:id");
   const id = parseInt(params?.id || "0");
   const { data: profile, isLoading } = useProfile(id);
   const { isAuthenticated } = useAuth();
-  const [contactOpen, setContactOpen] = useState(false);
 
   if (isLoading) return <Layout><div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin text-primary w-10 h-10" /></div></Layout>;
   
@@ -27,7 +40,11 @@ export default function ProfileDetail() {
     </Layout>
   );
 
-  const photoUrl = profile.photoUrl || `https://ui-avatars.com/api/?name=${profile.firstName}+${profile.lastName}&background=fde68a&color=92400e&size=400`;
+  const displayId = getDisplayProfileId(profile.id);
+  const age = calculateAge(profile.birthMonth, profile.birthYear);
+  const fullName = `${profile.firstName || ""} ${profile.lastName || ""}`.trim();
+  const initials = `${profile.firstName?.charAt(0) || ""}${profile.lastName?.charAt(0) || ""}`.toUpperCase();
+  const photoUrl = profile.photoUrl || `https://ui-avatars.com/api/?name=${initials}&background=fde68a&color=92400e&size=400`;
 
   return (
     <Layout>
@@ -43,52 +60,25 @@ export default function ProfileDetail() {
                <div className="aspect-[3/4] rounded-lg overflow-hidden bg-muted mb-4 relative">
                  <img 
                    src={photoUrl} 
-                   alt={profile.firstName} 
+                   alt={`Profile ${displayId}`}
                    className="w-full h-full object-cover"
                  />
                </div>
                
                <div className="space-y-3">
-                 <Dialog open={contactOpen} onOpenChange={setContactOpen}>
-                   <DialogTrigger asChild>
+                 {isAuthenticated ? (
+                   <Button className="w-full text-lg h-12" size="lg" data-testid="button-express-interest">
+                     <Heart className="w-5 h-5 mr-2" /> Express Interest
+                   </Button>
+                 ) : (
+                   <Link href="/login">
                      <Button className="w-full text-lg h-12" size="lg">
-                       Contact Profile
+                       Login to Connect
                      </Button>
-                   </DialogTrigger>
-                   <DialogContent>
-                     <DialogHeader>
-                       <DialogTitle>Contact Information</DialogTitle>
-                       <DialogDescription>
-                         {isAuthenticated ? (
-                           <div className="py-4 space-y-4">
-                             <div className="p-4 bg-muted rounded-lg border">
-                               <p className="font-semibold text-lg flex items-center gap-2">
-                                 <Phone className="w-5 h-5 text-primary" />
-                                 {profile.phoneNumber || "No phone number listed"}
-                               </p>
-                               <p className="text-sm text-muted-foreground mt-1">
-                                 Please mention you found them on NRI Christian Matrimony.
-                               </p>
-                             </div>
-                             {profile.phoneVerified && (
-                               <div className="flex items-center text-green-600 text-sm font-medium">
-                                 <CheckCircle className="w-4 h-4 mr-2" />
-                                 Phone Number Verified
-                               </div>
-                             )}
-                           </div>
-                         ) : (
-                           <div className="py-6 text-center">
-                             <p className="mb-4">You must be logged in to view contact details.</p>
-                             <a href="/api/login"><Button>Login Now</Button></a>
-                           </div>
-                         )}
-                       </DialogDescription>
-                     </DialogHeader>
-                   </DialogContent>
-                 </Dialog>
+                   </Link>
+                 )}
                  
-                 <Button variant="outline" className="w-full">
+                 <Button variant="outline" className="w-full" data-testid="button-shortlist">
                    <Heart className="w-4 h-4 mr-2" /> Shortlist
                  </Button>
                </div>
@@ -99,7 +89,7 @@ export default function ProfileDetail() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between border-b pb-2 border-primary/10">
                   <span className="text-muted-foreground">Profile ID</span>
-                  <span className="font-mono font-bold">{profile.id}</span>
+                  <span className="font-mono font-bold">{displayId}</span>
                 </div>
                 <div className="flex justify-between border-b pb-2 border-primary/10">
                   <span className="text-muted-foreground">Posted By</span>
@@ -112,8 +102,29 @@ export default function ProfileDetail() {
                   </span>
                 </div>
                 <div className="flex justify-between border-b pb-2 border-primary/10">
-                  <span className="text-muted-foreground">Active</span>
-                  <span className="font-medium">Recently</span>
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium text-green-600">Active</span>
+                </div>
+              </div>
+
+              {/* Verification Badges */}
+              <div className="mt-4 pt-4 border-t border-primary/10">
+                <h4 className="text-sm font-semibold mb-3">Verification Status</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-sm">
+                    {profile.phoneVerified ? (
+                      <CheckCircle className="w-4 h-4 text-green-600" />
+                    ) : (
+                      <Shield className="w-4 h-4 text-muted-foreground" />
+                    )}
+                    <span className={profile.phoneVerified ? "text-green-600 font-medium" : "text-muted-foreground"}>
+                      Phone {profile.phoneVerified ? "Verified" : "Not Verified"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="w-4 h-4 text-green-600" />
+                    <span className="text-green-600 font-medium">Email Verified</span>
+                  </div>
                 </div>
               </div>
             </Card>
@@ -122,25 +133,25 @@ export default function ProfileDetail() {
           {/* Right Column: Details */}
           <div className="lg:col-span-2 space-y-8">
             <div>
-              <div className="flex items-center gap-4 mb-2">
-                <h1 className="text-4xl font-serif font-bold text-foreground">
-                  Profile #{profile.id}
+              <div className="flex items-center gap-4 mb-2 flex-wrap">
+                <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground" data-testid="text-profile-name">
+                  {isAuthenticated ? fullName : displayId}
                 </h1>
                 {profile.phoneVerified && (
-                  <Badge className="bg-green-600 hover:bg-green-700">Verified</Badge>
+                  <Badge className="bg-green-600 hover:bg-green-700">
+                    <CheckCircle className="w-3 h-3 mr-1" /> Verified
+                  </Badge>
                 )}
               </div>
+              {!isAuthenticated && (
+                <p className="text-sm text-muted-foreground mb-2">
+                  Login to view full name and contact details
+                </p>
+              )}
               <p className="text-xl text-muted-foreground mb-6 flex flex-wrap items-center gap-x-4 gap-y-2">
                 <span className="flex items-center gap-2">
                   <User className="w-5 h-5" /> 
-                  {profile.gender}, {(() => {
-                    const today = new Date();
-                    const currentYear = today.getFullYear();
-                    const currentMonth = today.getMonth() + 1;
-                    let age = currentYear - profile.birthYear;
-                    if (currentMonth < profile.birthMonth) age--;
-                    return age;
-                  })()} years
+                  {profile.gender}{age !== null && `, ${age} years`}
                 </span>
                 <span className="flex items-center gap-2">
                   <MapPin className="w-5 h-5" /> {profile.city}, {profile.country}
@@ -154,17 +165,12 @@ export default function ProfileDetail() {
                    <User className="w-5 h-5" /> Basic Details
                  </h3>
                  <div className="space-y-4">
-                   <div className="grid grid-cols-2 gap-2">
-                     <span className="text-muted-foreground">Age</span>
-                     <span className="font-medium">{(() => {
-                       const today = new Date();
-                       const currentYear = today.getFullYear();
-                       const currentMonth = today.getMonth() + 1;
-                       let age = currentYear - profile.birthYear;
-                       if (currentMonth < profile.birthMonth) age--;
-                       return age;
-                     })()} Years</span>
-                   </div>
+                   {age !== null && (
+                     <div className="grid grid-cols-2 gap-2">
+                       <span className="text-muted-foreground">Age</span>
+                       <span className="font-medium">{age} Years</span>
+                     </div>
+                   )}
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Gender</span>
                      <span className="font-medium">{profile.gender}</span>
@@ -238,6 +244,19 @@ export default function ProfileDetail() {
                 {profile.partnerPreferences || "No specific preferences listed."}
               </p>
             </Card>
+
+            {/* Contact Section - Only visible when logged in */}
+            {isAuthenticated && (
+              <Card className="p-6 border-primary/20 bg-primary/5">
+                <h3 className="font-serif font-bold text-xl mb-4 text-primary">Contact Information</h3>
+                <p className="text-muted-foreground mb-4">
+                  To protect privacy, contact details are shared only after mutual interest is expressed.
+                </p>
+                <Button className="w-full md:w-auto" data-testid="button-request-contact">
+                  <Heart className="w-4 h-4 mr-2" /> Express Interest to Connect
+                </Button>
+              </Card>
+            )}
           </div>
         </div>
       </div>
