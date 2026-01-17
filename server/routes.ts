@@ -15,6 +15,9 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // Trust proxy for production (needed for secure cookies behind reverse proxy)
+  app.set("trust proxy", 1);
+
   // Setup Session
   const PgStore = connectPgSimple(session);
   app.use(
