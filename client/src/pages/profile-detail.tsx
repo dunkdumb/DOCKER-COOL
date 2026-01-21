@@ -263,12 +263,73 @@ export default function ProfileDetail() {
                      </span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Education</span>
+                     <span className="font-medium">{profile.education || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Marital Status</span>
+                     <span className="font-medium">{profile.maritalStatus || "N/A"}</span>
+                   </div>
+                   {profile.maritalStatus && profile.maritalStatus !== "Never Married" && profile.hasChildren && (
+                     <div className="grid grid-cols-2 gap-2">
+                       <span className="text-muted-foreground">Children</span>
+                       <span className="font-medium">{profile.hasChildren}</span>
+                     </div>
+                   )}
+                   <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Native Place</span>
                      <span className="font-medium">{profile.nativePlace || "N/A"}</span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Native Language</span>
                      <span className="font-medium">{profile.nativeLanguage || "N/A"}</span>
+                   </div>
+                 </div>
+               </Card>
+            </div>
+
+            {/* Lifestyle & Family Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+               <Card className="p-6">
+                 <h3 className="font-serif font-bold text-xl mb-4 text-primary">Lifestyle</h3>
+                 <div className="space-y-4">
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Family Type</span>
+                     <span className="font-medium">{profile.familyType || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Diet</span>
+                     <span className="font-medium">{profile.diet || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Drinking</span>
+                     <span className="font-medium">{profile.drinking || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Smoking</span>
+                     <span className="font-medium">{profile.smoking || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Willing to Relocate</span>
+                     <span className="font-medium">{profile.willingToRelocate || "N/A"}</span>
+                   </div>
+                 </div>
+               </Card>
+
+               <Card className="p-6">
+                 <h3 className="font-serif font-bold text-xl mb-4 text-primary">Family Details</h3>
+                 <div className="space-y-4">
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Father's Occupation</span>
+                     <span className="font-medium">{profile.fathersOccupation || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Mother's Occupation</span>
+                     <span className="font-medium">{profile.mothersOccupation || "N/A"}</span>
+                   </div>
+                   <div className="grid grid-cols-2 gap-2">
+                     <span className="text-muted-foreground">Siblings</span>
+                     <span className="font-medium">{profile.siblings || "N/A"}</span>
                    </div>
                  </div>
                </Card>
