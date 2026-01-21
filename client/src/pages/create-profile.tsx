@@ -159,9 +159,9 @@ export default function CreateProfile() {
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
       toast({ title: "Login Required", description: "Please login to create a profile", variant: "destructive" });
-      setTimeout(() => window.location.href = "/api/login", 1000);
+      setTimeout(() => setLocation("/login"), 1000);
     }
-  }, [authLoading, isAuthenticated, toast]);
+  }, [authLoading, isAuthenticated, toast, setLocation]);
 
   if (authLoading) return <Layout><div className="flex h-screen items-center justify-center"><Loader2 className="animate-spin" /></div></Layout>;
 

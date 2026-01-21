@@ -82,14 +82,66 @@ export default function ProfileDetail() {
 
   return (
     <Layout>
-      <div className="container mx-auto px-4 py-8">
-        <Link href="/profiles" className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 transition-colors">
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back to Browse
+      <div className="container mx-auto px-3 py-4 md:px-4 md:py-8">
+        <Link href="/profiles" className="inline-flex items-center text-muted-foreground hover:text-primary mb-3 md:mb-6 transition-colors text-sm">
+          <ArrowLeft className="w-4 h-4 mr-1" /> Back
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column: Photo & Quick Actions */}
-          <div className="lg:col-span-1 space-y-6">
+        {/* Mobile-first: Photo + Name Header */}
+        <div className="lg:hidden mb-4">
+          <div className="flex items-start gap-3 mb-3">
+            <div className="w-20 h-24 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+              <img 
+                src={photoUrl} 
+                alt={`Profile ${displayId}`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <h1 className="text-xl font-serif font-bold text-foreground" data-testid="text-profile-name-mobile">
+                  {initials} - {displayId}
+                </h1>
+                {profile.phoneVerified && (
+                  <Badge className="bg-green-600 hover:bg-green-700 text-xs py-0">
+                    <CheckCircle className="w-3 h-3 mr-0.5" /> Verified
+                  </Badge>
+                )}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {profile.gender}{age !== null && `, ${age} yrs`} | {profile.city}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {profile.denomination} | {profile.occupation || "N/A"}
+              </p>
+            </div>
+          </div>
+          {isAuthenticated ? (
+            <Button 
+              className="w-full" 
+              size="default" 
+              data-testid="button-express-interest-mobile"
+              onClick={handleExpressInterest}
+              disabled={expressInterestMutation.isPending || hasExpressedInterest}
+            >
+              {expressInterestMutation.isPending ? (
+                <><Loader2 className="w-4 h-4 mr-1 animate-spin" /> Sending...</>
+              ) : hasExpressedInterest ? (
+                <><CheckCircle className="w-4 h-4 mr-1" /> Interest Sent</>
+              ) : (
+                <><Heart className="w-4 h-4 mr-1" /> Express Interest</>
+              )}
+            </Button>
+          ) : (
+            <Link href="/login">
+              <Button className="w-full" size="default">Login to Connect</Button>
+            </Link>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
+          {/* Left Column: Photo & Quick Actions (Desktop only) */}
+          <div className="hidden lg:block lg:col-span-1 space-y-6">
             <Card className="p-4 border-none shadow-lg overflow-hidden">
                <div className="aspect-[3/4] rounded-lg overflow-hidden bg-muted mb-4 relative">
                  <img 
@@ -179,8 +231,9 @@ export default function ProfileDetail() {
           </div>
 
           {/* Right Column: Details */}
-          <div className="lg:col-span-2 space-y-8">
-            <div>
+          <div className="lg:col-span-2 space-y-3 md:space-y-8">
+            {/* Desktop header - hidden on mobile */}
+            <div className="hidden lg:block">
               <div className="flex items-center gap-4 mb-2 flex-wrap">
                 <h1 className="text-3xl md:text-4xl font-serif font-bold text-foreground" data-testid="text-profile-name">
                   {initials} - {displayId}
@@ -202,12 +255,12 @@ export default function ProfileDetail() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <Card className="p-6">
-                 <h3 className="font-serif font-bold text-xl mb-4 text-primary flex items-center gap-2">
-                   <User className="w-5 h-5" /> Basic Details
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+               <Card className="p-3 md:p-6">
+                 <h3 className="font-serif font-bold text-base md:text-xl mb-2 md:mb-4 text-primary flex items-center gap-2">
+                   <User className="w-4 h-4 md:w-5 md:h-5" /> Basic Details
                  </h3>
-                 <div className="space-y-4">
+                 <div className="space-y-1.5 md:space-y-4 text-sm">
                    {age !== null && (
                      <div className="grid grid-cols-2 gap-2">
                        <span className="text-muted-foreground">Age</span>
@@ -249,11 +302,11 @@ export default function ProfileDetail() {
                  </div>
                </Card>
 
-               <Card className="p-6">
-                 <h3 className="font-serif font-bold text-xl mb-4 text-primary flex items-center gap-2">
-                   <Church className="w-5 h-5" /> Background
+               <Card className="p-3 md:p-6">
+                 <h3 className="font-serif font-bold text-base md:text-xl mb-2 md:mb-4 text-primary flex items-center gap-2">
+                   <Church className="w-4 h-4 md:w-5 md:h-5" /> Background
                  </h3>
-                 <div className="space-y-4">
+                 <div className="space-y-1.5 md:space-y-4 text-sm">
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Denomination</span>
                      <span className="font-medium">
@@ -289,10 +342,10 @@ export default function ProfileDetail() {
             </div>
 
             {/* Lifestyle & Family Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-               <Card className="p-6">
-                 <h3 className="font-serif font-bold text-xl mb-4 text-primary">Lifestyle</h3>
-                 <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+               <Card className="p-3 md:p-6">
+                 <h3 className="font-serif font-bold text-base md:text-xl mb-2 md:mb-4 text-primary">Lifestyle</h3>
+                 <div className="space-y-1.5 md:space-y-4 text-sm">
                    <div className="grid grid-cols-2 gap-2">
                      <span className="text-muted-foreground">Family Type</span>
                      <span className="font-medium">{profile.familyType || "N/A"}</span>
@@ -310,21 +363,21 @@ export default function ProfileDetail() {
                      <span className="font-medium">{profile.smoking || "N/A"}</span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
-                     <span className="text-muted-foreground">Willing to Relocate</span>
+                     <span className="text-muted-foreground">Relocate</span>
                      <span className="font-medium">{profile.willingToRelocate || "N/A"}</span>
                    </div>
                  </div>
                </Card>
 
-               <Card className="p-6">
-                 <h3 className="font-serif font-bold text-xl mb-4 text-primary">Family Details</h3>
-                 <div className="space-y-4">
+               <Card className="p-3 md:p-6">
+                 <h3 className="font-serif font-bold text-base md:text-xl mb-2 md:mb-4 text-primary">Family Details</h3>
+                 <div className="space-y-1.5 md:space-y-4 text-sm">
                    <div className="grid grid-cols-2 gap-2">
-                     <span className="text-muted-foreground">Father's Occupation</span>
+                     <span className="text-muted-foreground">Father</span>
                      <span className="font-medium">{profile.fathersOccupation || "N/A"}</span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
-                     <span className="text-muted-foreground">Mother's Occupation</span>
+                     <span className="text-muted-foreground">Mother</span>
                      <span className="font-medium">{profile.mothersOccupation || "N/A"}</span>
                    </div>
                    <div className="grid grid-cols-2 gap-2">
@@ -335,23 +388,23 @@ export default function ProfileDetail() {
                </Card>
             </div>
 
-            <Card className="p-6">
-              <h3 className="font-serif font-bold text-xl mb-4 text-primary">About Me</h3>
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            <Card className="p-3 md:p-6">
+              <h3 className="font-serif font-bold text-base md:text-xl mb-2 md:mb-4 text-primary">About Me</h3>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm">
                 {profile.aboutMe || "No description provided."}
               </p>
             </Card>
 
-            <Card className="p-6">
-              <h3 className="font-serif font-bold text-xl mb-4 text-primary">Partner Preferences</h3>
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            <Card className="p-3 md:p-6">
+              <h3 className="font-serif font-bold text-base md:text-xl mb-2 md:mb-4 text-primary">Partner Preferences</h3>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-line text-sm">
                 {profile.partnerPreferences || "No specific preferences listed."}
               </p>
             </Card>
 
-            {/* Contact Section - Only visible when logged in */}
+            {/* Contact Section - Only visible when logged in (hidden on mobile as Express Interest is at top) */}
             {isAuthenticated && (
-              <Card className="p-6 border-primary/20 bg-primary/5">
+              <Card className="hidden md:block p-6 border-primary/20 bg-primary/5">
                 <h3 className="font-serif font-bold text-xl mb-4 text-primary">Contact Information</h3>
                 <p className="text-muted-foreground mb-4">
                   To protect privacy, contact details are shared only after mutual interest is expressed.
