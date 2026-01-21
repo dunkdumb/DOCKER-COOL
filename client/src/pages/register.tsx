@@ -136,8 +136,8 @@ export default function RegisterPage() {
       return res.json();
     },
     onSuccess: () => {
-      toast({ title: "Phone verified!", description: "Welcome to NRI Christian Matrimony" });
-      navigate("/");
+      toast({ title: "Phone verified!", description: "Now let's create your profile" });
+      navigate("/create-profile");
     },
     onError: (error: Error) => {
       toast({ title: "Verification failed", description: error.message, variant: "destructive" });
@@ -149,8 +149,8 @@ export default function RegisterPage() {
       return { success: true };
     },
     onSuccess: () => {
-      toast({ title: "Account created!", description: "Welcome to NRI Christian Matrimony. You can verify your phone later when creating a profile." });
-      navigate("/");
+      toast({ title: "Account created!", description: "Now let's create your profile" });
+      navigate("/create-profile");
     },
   });
 
