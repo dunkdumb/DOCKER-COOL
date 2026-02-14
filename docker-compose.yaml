@@ -11,7 +11,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5001
-      - DATABASE_URL=postgresql://neondb_owner:npg_YRJmU1MteV4x@ep-wandering-violet-ai6hty2k-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require
+      - DATABASE_URL=postgresql://neondb_owner:npg_YRJmU1MteV4x@ep-wandering-violet-ai6hty2k-pooler.c-4.us-east-1.aws.neon.tech:6432/neondb?sslmode=require
       - SESSION_SECRET=nri-christian-matrimony-super-secret-key-2024
     restart: unless-stopped
     healthcheck:
